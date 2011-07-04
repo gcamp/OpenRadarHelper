@@ -14,6 +14,8 @@ function overwriteSubmitButton() {
 }
 
 function saveRadarContent() {	
+//Save the radar content in the localStorage
+//We need to send message to GlobalPage.html because injected script (this js) store use the site local storage, not the extension one.
 	safari.self.tab.dispatchMessage("title", document.getElementById("probTitleNewProb").value);
 	safari.self.tab.dispatchMessage("product", document.getElementById("prodList").options[document.getElementById("prodList").selectedIndex].text);
 	safari.self.tab.dispatchMessage("product_version", document.getElementById("version").value);
@@ -24,6 +26,7 @@ function saveRadarContent() {
 }
 
 function clearRadarContent() {
+//Clear the data after submission
 	safari.self.tab.dispatchMessage("number", null);
 	safari.self.tab.dispatchMessage("title", null);
 	safari.self.tab.dispatchMessage("product", null);
@@ -41,6 +44,7 @@ function saveRadarNumberAndSubmit() {
 }
 
 function fillContent () {
+//Fill the content on Open Radar. Same process as saveRadarContent().
 	var date = new Date();
 	document.getElementsByName("originated")[0].value = date.toUTCString();
 	document.getElementsByName("status")[0].value = "Open";
@@ -62,13 +66,13 @@ function sendToOpenRadar() {
 	if (originalAction !== null) originalAction(); //Run the original action
 }
 
-function getMessage(msgEvent) {
+function getMessage(msgEvent) { //The GlobalPage.html returned
 	if (msgEvent.name == "wantsOpenRadar" && msgEvent.message !== "null") saveRadarNumberAndSubmit();
 	else if (msgEvent.message !== "null") document.getElementsByName(msgEvent.name)[0].value = msgEvent.message;
 }
 
-if (document.URL == "http://openradar.appspot.com/myradars/add") fillContent();
-else if (document.title.indexOf("New Problem") != -1) overwriteSubmitButton();
-else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getDatabaseValue", "wantsOpenRadar");
+if (document.URL == "http://openradar.appspot.com/myradars/add") fillContent(); //In OpenRadar bug reporter
+else if (document.title.indexOf("New Problem") != -1) overwriteSubmitButton(); //In Apple bug reporter, in "New Problem" page.
+else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getDatabaseValue", "wantsOpenRadar"); //In Apple bug reporter, in the submission confirmation.
 
 safari.self.addEventListener("message", getMessage, false);
