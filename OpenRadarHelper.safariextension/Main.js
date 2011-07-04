@@ -1,7 +1,8 @@
 var originalAction;
 
-function sendToOpenRadar() {
-	if (confirm("Do you want to send this bug to Open Radar too?")) saveRadarContent();
+function sendToOpenRadar(askValue) {
+	if (askValue == "always") saveRadarContent();
+	else if (askValue == "ask" && confirm("Do you want to send this bug to Open Radar too?")) saveRadarContent();
 	
 	if (originalAction !== null) originalAction(); //Run the original action
 }
@@ -10,7 +11,9 @@ function overwriteSubmitButton() {
 	var sendButton = document.getElementsByName("Save")[0];
 
 	originalAction = sendButton.onclick; //Save the action and overwrite the submit button
-	sendButton.onclick = sendToOpenRadar;
+	sendButton.onclick = function () {
+		safari.self.tab.dispatchMessage("getSettingValue", "ask");
+	};
 }
 
 function saveRadarContent() {	
@@ -67,7 +70,8 @@ function sendToOpenRadar() {
 }
 
 function getMessage(msgEvent) { //The GlobalPage.html returned
-	if (msgEvent.name == "wantsOpenRadar" && msgEvent.message !== "null") saveRadarNumberAndSubmit();
+	if (msgEvent.name == "ask") sendToOpenRadar(msgEvent.message);
+	else if (msgEvent.name == "wantsOpenRadar" && msgEvent.message !== "null") saveRadarNumberAndSubmit();
 	else if (msgEvent.message !== "null") document.getElementsByName(msgEvent.name)[0].value = msgEvent.message;
 }
 

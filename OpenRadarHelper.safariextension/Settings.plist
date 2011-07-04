@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<array/>
+<array>
+	<dict>
+		<key>DefaultValue</key>
+		<string>ask</string>
+		<key>Key</key>
+		<string>ask</string>
+		<key>Title</key>
+		<string>Send to OpenRadar</string>
+		<key>Titles</key>
+		<array>
+			<string>Always</string>
+			<string>Ask me</string>
+			<string>Never</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<string>always</string>
+			<string>ask</string>
+			<string>never</string>
+		</array>
+	</dict>
+</array>
 </plist>
