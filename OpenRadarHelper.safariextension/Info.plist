@@ -21,7 +21,7 @@
 		<key>Database Quota</key>
 		<real>5242880</real>
 		<key>Global Page</key>
-		<string>Scripts/GlobalPage.html</string>
+		<string>GlobalPage.html</string>
 	</dict>
 	<key>Content</key>
 	<dict>
@@ -29,7 +29,7 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>Scripts/Main.js</string>
+				<string>Main.js</string>
 			</array>
 		</dict>
 		<key>Whitelist</key>
