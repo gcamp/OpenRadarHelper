@@ -17,3 +17,6 @@ build/
 
 # Backup files
 *~.nib
+
+# Espresso project
+*.esproj
