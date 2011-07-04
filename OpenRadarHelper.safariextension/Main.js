@@ -53,7 +53,7 @@ function fillContent () {
 	safari.self.tab.dispatchMessage("getDatabaseValue", "reproducible");
 	safari.self.tab.dispatchMessage("getDatabaseValue", "description");
 	
-	//clearRadarContent();
+	clearRadarContent();
 };
 
 function sendToOpenRadar() {
