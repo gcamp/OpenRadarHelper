@@ -16,6 +16,19 @@ function overwriteSubmitButton() {
 	};
 }
 
+function saveDuplicateContent() {
+
+}
+
+function addDuplicateButton() {
+	var button= document.createElement('input');
+	button.setAttribute('type','button');
+	button.setAttribute("value", "Duplicate this radar on bugreport.apple.com");
+	button.setAttribute("style", "position: relative; top: -3px; left: 10px;")
+	button.onClick = saveDuplicateContent;
+	document.getElementsByTagName('h3')[0].appendChild(button);
+}
+
 function saveRadarContent() {	
 //Save the radar content in the localStorage
 //We need to send message to GlobalPage.html because injected script (this js) store use the site local storage, not the extension one.
@@ -76,6 +89,7 @@ function getMessage(msgEvent) { //The GlobalPage.html returned
 }
 
 if (document.URL == "http://openradar.appspot.com/myradars/add") fillContent(); //In OpenRadar bug reporter
+else if (document.URL.indexOf("http://openradar.appspot.com/") != -1) addDuplicateButton(); //In OpenRadar, in description page
 else if (document.title.indexOf("New Problem") != -1) overwriteSubmitButton(); //In Apple bug reporter, in "New Problem" page.
 else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getDatabaseValue", "wantsOpenRadar"); //In Apple bug reporter, in the submission confirmation.
 

@@ -34,8 +34,8 @@
 		</dict>
 		<key>Whitelist</key>
 		<array>
+			<string>http://openradar.appspot.com/*</string>
 			<string>https://bugreport.apple.com/*</string>
-			<string>http://openradar.appspot.com/myradars/add</string>
 		</array>
 	</dict>
 	<key>Description</key>
