@@ -11,7 +11,7 @@
        } 
        else if (messageEvent.name == "getSettingValue") {
        		var settingValue = safari.extension.settings.getItem(messageEvent.message);
-       		safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(messageEvent.message, value);
+       		safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(messageEvent.message, settingValue);
        }
        else {
  	      localStorage.setItem(messageEvent.name, messageEvent.message);
