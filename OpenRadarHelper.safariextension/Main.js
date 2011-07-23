@@ -18,9 +18,9 @@ function saveDuplicateContent() {
 	var description = contentDiv.childNodes[3].childNodes[3].textContent;
 	
 	//Add the mention that's a duplicate
-	description = description + "\n========================\n";
-	description = description + "Duplicate of : " + contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[2].childNodes[1].textContent;
-	description = description + "\n========================\n";
+	description = "\n========================\n" + description;
+	description = "Duplicate of : " + contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[2].childNodes[1].textContent + description;
+	description = "\n========================\n" + description;
 	safari.self.tab.dispatchMessage("probDescID", description);
 	
 	
