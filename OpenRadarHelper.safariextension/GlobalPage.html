@@ -4,7 +4,7 @@
    <title>old extension bar page</title>
    <script type="text/javascript">
    
-   function respondToMessage(messageEvent) {
+   function respondToMessage(messageEvent) {   
        if (messageEvent.name == "getDuplicateValue") {
              var value = localStorage.getItem(messageEvent.message);
              var returnedValue = [messageEvent.message, value];
