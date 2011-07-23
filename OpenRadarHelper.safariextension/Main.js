@@ -1,8 +1,7 @@
 var originalAction;
 
-function sendToOpenRadar(askValue) {
-	if (askValue == "always") saveRadarContent();
-	else if (askValue == "ask" && confirm("Do you want to send this bug to Open Radar too?")) saveRadarContent();
+function sendToOpenRadar() {
+	saveRadarContent();
 	
 	if (originalAction !== null) originalAction(); //Run the original action
 }
@@ -11,13 +10,28 @@ function overwriteSubmitButton() {
 	var sendButton = document.getElementsByName("Save")[0];
 
 	originalAction = sendButton.onclick; //Save the action and overwrite the submit button
-	sendButton.onclick = function () {
-		safari.self.tab.dispatchMessage("getSettingValue", "ask");
-	};
+	sendButton.onclick = sendToOpenRadar;
 }
 
 function saveDuplicateContent() {
-
+	var contentDiv = document.getElementById("content");
+	var description = contentDiv.childNodes[1].childNodes[0].textContent;
+	
+	//Add the mention that's a duplicate
+	description = description + "\n========================\n";
+	description = description + "Duplicate of : " + contentDiv.childNodes[0].childNodes[1].childNodes[1].textContent;
+	description = description + "\n========================\n";
+	safari.self.tab.dispatchMessage("probDescID", description);
+	
+	
+	safari.self.tab.dispatchMessage("probTitleNewProb", document.getElementsByTagName("h3")[0].textContent);
+	safari.self.tab.dispatchMessage("prodList", contentDiv.childNodes[0].childNodes[3].childNodes[1].textContent);
+	safari.self.tab.dispatchMessage("version", contentDiv.childNodes[0].childNodes[3].childNodes[3].textContent);
+	safari.self.tab.dispatchMessage("classList", contentDiv.childNodes[0].childNodes[4].childNodes[1].textContent);
+	safari.self.tab.dispatchMessage("reproducibleNewProb", contentDiv.childNodes[0].childNodes[4].childNodes[3].textContent);
+	safari.self.tab.dispatchMessage("wantsDuplicateRadar", "yes");
+	
+	window.open('https://bugreport.apple.com/', "new tab");		
 }
 
 function addDuplicateButton() {
@@ -65,26 +79,42 @@ function fillContent () {
 	document.getElementsByName("originated")[0].value = date.toUTCString();
 	document.getElementsByName("status")[0].value = "Open";
 	
-	safari.self.tab.dispatchMessage("getDatabaseValue", "number");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "title");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "product");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "product_version");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "classification");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "reproducible");
-	safari.self.tab.dispatchMessage("getDatabaseValue", "description");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "number");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "title");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "product");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "product_version");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "classification");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "reproducible");
+	safari.self.tab.dispatchMessage("getOpenRadarValue", "description");
 	
 	clearRadarContent();
 };
 
+function fillDuplicateContent() {
+	safari.self.tab.dispatchMessage("getDuplicateValue", "probTitleNewProb8");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "title");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "product");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "product_version");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "classification");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "reproducible");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "description");
+}
+
 function getMessage(msgEvent) { //The GlobalPage.html returned
-	if (msgEvent.name == "ask") sendToOpenRadar(msgEvent.message);
-	else if (msgEvent.name == "wantsOpenRadar" && msgEvent.message !== "null") saveRadarNumberAndSubmit();
-	else if (msgEvent.message !== "null") document.getElementsByName(msgEvent.name)[0].value = msgEvent.message;
+	if (msgEvent.name == "wantsOpenRadar" && msgEvent.message !== "null") saveRadarNumberAndSubmit();
+	else if (msgEvent.name == "wantsDuplicateRadar") {
+		if (msgEvent.message == "yes") fillDuplicateContent();
+		else overwriteSubmitButton();
+	}
+	else if (msgEvent.name == "openRadar") document.getElementsByName(msgEvent.name)[0].value = msgEvent.message;
+	else if (msgEvent.name == "duplicate") {
+		document.getElementById(msgEvent.name).value = msgEvent.message;
+	}
 }
 
 if (document.URL == "http://openradar.appspot.com/myradars/add") fillContent(); //In OpenRadar bug reporter
 else if (document.URL.indexOf("http://openradar.appspot.com/") != -1) addDuplicateButton(); //In OpenRadar, in description page
-else if (document.title.indexOf("New Problem") != -1) overwriteSubmitButton(); //In Apple bug reporter, in "New Problem" page.
+else if (document.title.indexOf("New Problem") != -1) safari.self.tab.dispatchMessage("getDatabaseValue", "wantsDuplicateRadar"); //In Apple bug reporter, in "New Problem" page.
 else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getDatabaseValue", "wantsOpenRadar"); //In Apple bug reporter, in the submission confirmation.
 
 safari.self.addEventListener("message", getMessage, false);

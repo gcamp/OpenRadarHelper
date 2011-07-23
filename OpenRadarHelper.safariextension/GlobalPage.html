@@ -5,9 +5,15 @@
    <script type="text/javascript">
    
    function respondToMessage(messageEvent) {
-       if (messageEvent.name == "getDatabaseValue") {
+       if (messageEvent.name == "getDuplicateValue") {
              var value = localStorage.getItem(messageEvent.message);
-             safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(messageEvent.message, value);
+             var returnedValue = [messageEvent.message, value];
+             safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("duplicate", returnedValue);
+       } 
+       else if (messageEvent.name == "getOpenRadarValue") {
+             var value = localStorage.getItem(messageEvent.message);
+             var returnedValue = [messageEvent.message, value];
+             safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("openRadar", returnedValue);
        } 
        else if (messageEvent.name == "getSettingValue") {
        		var settingValue = safari.extension.settings.getItem(messageEvent.message);
