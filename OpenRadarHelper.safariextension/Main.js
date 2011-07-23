@@ -15,31 +15,31 @@ function overwriteSubmitButton() {
 
 function saveDuplicateContent() {
 	var contentDiv = document.getElementById("content");
-	var description = contentDiv.childNodes[1].childNodes[0].textContent;
+	var description = contentDiv.childNodes[3].childNodes[3].textContent;
 	
 	//Add the mention that's a duplicate
 	description = description + "\n========================\n";
-	description = description + "Duplicate of : " + contentDiv.childNodes[0].childNodes[1].childNodes[1].textContent;
+	description = description + "Duplicate of : " + contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[2].childNodes[1].textContent;
 	description = description + "\n========================\n";
 	safari.self.tab.dispatchMessage("probDescID", description);
 	
 	
 	safari.self.tab.dispatchMessage("probTitleNewProb", document.getElementsByTagName("h3")[0].textContent);
-	safari.self.tab.dispatchMessage("prodList", contentDiv.childNodes[0].childNodes[3].childNodes[1].textContent);
-	safari.self.tab.dispatchMessage("version", contentDiv.childNodes[0].childNodes[3].childNodes[3].textContent);
-	safari.self.tab.dispatchMessage("classList", contentDiv.childNodes[0].childNodes[4].childNodes[1].textContent);
-	safari.self.tab.dispatchMessage("reproducibleNewProb", contentDiv.childNodes[0].childNodes[4].childNodes[3].textContent);
+	safari.self.tab.dispatchMessage("prodList", contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[6].childNodes[1].textContent);
+	safari.self.tab.dispatchMessage("version", contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[6].childNodes[4].textContent);
+	safari.self.tab.dispatchMessage("classList", contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[8].childNodes[1].textContent);
+	safari.self.tab.dispatchMessage("reproducibleNewProb", contentDiv.childNodes[3].childNodes[1].childNodes[1].childNodes[8].childNodes[4].textContent);
 	safari.self.tab.dispatchMessage("wantsDuplicateRadar", "yes");
 	
 	window.open('https://bugreport.apple.com/', "new tab");		
 }
 
 function addDuplicateButton() {
-	var button= document.createElement('input');
+	var button = document.createElement('input');
 	button.setAttribute('type','button');
 	button.setAttribute("value", "Duplicate this radar on bugreport.apple.com");
 	button.setAttribute("style", "position: relative; top: -3px; left: 10px;")
-	button.onClick = saveDuplicateContent;
+	button.onclick = saveDuplicateContent;
 	document.getElementsByTagName('h3')[0].appendChild(button);
 }
 
@@ -91,26 +91,43 @@ function fillContent () {
 };
 
 function fillDuplicateContent() {
-	safari.self.tab.dispatchMessage("getDuplicateValue", "probTitleNewProb8");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "title");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "product");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "product_version");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "classification");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "reproducible");
-	safari.self.tab.dispatchMessage("getDuplicateValue", "description");
+	originalAction();
+
+	safari.self.tab.dispatchMessage("getDuplicateValue", "probTitleNewProb");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "prodList");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "version");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "classList");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "reproducibleNewProb");
+	safari.self.tab.dispatchMessage("getDuplicateValue", "probDescID");
 }
 
 function getMessage(msgEvent) { //The GlobalPage.html returned
 	if (msgEvent.name == "openRadar") {
 		if (msgEvent.message[0] == "wantsOpenRadar" && msgEvent.message[1] !== "null") saveRadarNumberAndSubmit();
 		else if (msgEvent.message[0] == "wantsDuplicateRadar") {
-			if (msgEvent.message[1] == "yes") fillDuplicateContent();
+			if (msgEvent.message[1] == "yes") {
+				var mainBody = document.getElementsByTagName("body")[0];
+				originalAction = mainBody.onload;
+				mainBody.onload = fillDuplicateContent;
+			}
 			else overwriteSubmitButton();
 		}	
-		else if (msgEvent.message[1] != "null") document.getElementsByName(msgEvent.message[0])[0].value = msgEvent.message[1];
+		else if (msgEvent.message[1] != "null") {
+			 document.getElementsByName(msgEvent.message[0])[0].value = msgEvent.message[1];
+		}
 	}
 	else if (msgEvent.name == "duplicate") {
-		document.getElementById(msgEvent.message[0]).value = msgEvent.message[1];
+		if (msgEvent.message[0] == "prodList" || msgEvent.message[0] == "classList" || msgEvent.message[0] == "reproducibleNewProb") {
+			var selectedIndex = 0;
+			var options = document.getElementById(msgEvent.message[0]).options;
+			for(var index = 0; index < options.length; index++) {
+				var textValue = options[index].text;
+				if (textValue.indexOf(msgEvent.message[1]) != -1 && selectedIndex == 0) selectedIndex = index;
+			}
+			
+			document.getElementById(msgEvent.message[0]).selectedIndex = selectedIndex;
+		}
+		else document.getElementById(msgEvent.message[0]).value = msgEvent.message[1];
 	}
 }
 
