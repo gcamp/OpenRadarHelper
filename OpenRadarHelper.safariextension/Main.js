@@ -67,6 +67,17 @@ function clearRadarContent() {
 	safari.self.tab.dispatchMessage("wantsOpenRadar", null);
 }
 
+function clearDuplicateContent() {
+	//Clear the data after submission
+	safari.self.tab.dispatchMessage("probDescID", null);
+	safari.self.tab.dispatchMessage("probTitleNewProb", null);
+	safari.self.tab.dispatchMessage("prodList", null);
+	safari.self.tab.dispatchMessage("version", null);
+	safari.self.tab.dispatchMessage("classList", null);
+	safari.self.tab.dispatchMessage("reproducibleNewProb", null);
+	safari.self.tab.dispatchMessage("wantsDuplicateRadar", null);
+}
+
 function saveRadarNumberAndSubmit() {
 		safari.self.tab.dispatchMessage("number", document.getElementsByTagName("font")[5].textContent);
 		
@@ -99,6 +110,8 @@ function fillDuplicateContent() {
 	safari.self.tab.dispatchMessage("getDuplicateValue", "classList");
 	safari.self.tab.dispatchMessage("getDuplicateValue", "reproducibleNewProb");
 	safari.self.tab.dispatchMessage("getDuplicateValue", "probDescID");
+	
+	clearDuplicateContent();
 }
 
 function getMessage(msgEvent) { //The GlobalPage.html returned
