@@ -25,6 +25,8 @@ function clearRadarContent() {
 function saveRadarNumberAndSubmit() {
 		safari.self.tab.dispatchMessage("number", document.getElementsByTagName("font")[5].textContent);
 		
+		clearDuplicateContent();
+		
 		window.open('http://openradar.appspot.com/myradars/add', "new tab");		
 }
 

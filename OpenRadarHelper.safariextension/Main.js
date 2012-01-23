@@ -22,8 +22,6 @@ function fillDuplicateContent() {
 	safari.self.tab.dispatchMessage("getDuplicateValue", "classList");
 	safari.self.tab.dispatchMessage("getDuplicateValue", "reproducibleNewProb");
 	safari.self.tab.dispatchMessage("getDuplicateValue", "probDescID");
-	
-	clearDuplicateContent();
 }
 
 function getMessage(msgEvent) { //The GlobalPage.html returned
