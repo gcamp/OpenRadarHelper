@@ -47,6 +47,7 @@
 			<array>
 				<string>openradar.appspot.com</string>
 				<string>bugreport.apple.com</string>
+				<string>www.openradar.me</string>
 			</array>
 			<key>Include Secure Pages</key>
 			<true/>
