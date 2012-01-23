@@ -58,7 +58,7 @@ function getMessage(msgEvent) { //The GlobalPage.html returned
 
 safari.self.addEventListener("message", getMessage, false);
 
-if (document.URL == "http://openradar.appspot.com/myradars/add") fillContent(); //In OpenRadar bug reporter
-else if (document.URL.indexOf("http://openradar.appspot.com/") != -1) addDuplicateButton(); //In OpenRadar, in description page
+if (document.URL == "http://openradar.appspot.com/myradars/add" || document.URL == "http://www.openradar.me/myradars/add") fillContent(); //In OpenRadar bug reporter
+else if (document.URL.indexOf("http://openradar.appspot.com") != -1 || document.URL.indexOf("http://www.openradar.me") != -1) addDuplicateButton(); //In OpenRadar, in description page
 else if (document.title.indexOf("New Problem") != -1) safari.self.tab.dispatchMessage("getOpenRadarValue", "wantsDuplicateRadar"); //In Apple bug reporter, in "New Problem" page.
 else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getOpenRadarValue", "wantsOpenRadar"); //In Apple bug reporter, in the submission confirmation.
