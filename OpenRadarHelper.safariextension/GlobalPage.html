@@ -15,6 +15,11 @@
              var returnedValue = [messageEvent.message, value];
              safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("openRadar", returnedValue);
        } 
+       else if (messageEvent.name == "getUpdateValue") {
+             var value = localStorage.getItem(messageEvent.message);
+             var returnedValue = [messageEvent.message, value];
+             safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("update", returnedValue);
+       } 
        else if (messageEvent.name == "getSettingValue") {
        		var settingValue = safari.extension.settings.getItem(messageEvent.message);
        		safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(messageEvent.message, settingValue);

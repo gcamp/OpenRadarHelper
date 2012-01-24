@@ -19,15 +19,6 @@ function saveDuplicateContent() {
 	window.open('https://bugreport.apple.com/', "new tab");		
 }
 
-function addDuplicateButton() {
-	var button = document.createElement('input');
-	button.setAttribute('type','button');
-	button.setAttribute("value", "Duplicate this radar on bugreport.apple.com");
-	button.setAttribute("style", "position: relative; top: -3px; left: 10px;")
-	button.onclick = saveDuplicateContent;
-	document.getElementsByTagName('h3')[0].appendChild(button);
-}
-
 function clearDuplicateContent() {
 	//Clear the data after submission
 	safari.self.tab.dispatchMessage("probDescID", null);
@@ -37,4 +28,13 @@ function clearDuplicateContent() {
 	safari.self.tab.dispatchMessage("classList", null);
 	safari.self.tab.dispatchMessage("reproducibleNewProb", null);
 	safari.self.tab.dispatchMessage("wantsDuplicateRadar", null);
+}
+
+function addDuplicateButton() {
+	var button = document.createElement('input');
+	button.setAttribute('type','button');
+	button.setAttribute("value", "Duplicate this radar on bugreport.apple.com");
+	button.setAttribute("style", "position: relative; top: -3px; left: 10px;")
+	button.onclick = saveDuplicateContent;
+	document.getElementsByTagName('h3')[0].appendChild(button);
 }

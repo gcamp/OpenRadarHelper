@@ -1,18 +1,5 @@
 var originalAction;
 
-function sendToOpenRadar() {
-	saveRadarContent();
-	
-	if (originalAction !== null) originalAction(); //Run the original action
-}
-
-function overwriteSubmitButton() {
-	var sendButton = document.getElementsByName("Save")[0];
-
-	originalAction = sendButton.onclick; //Save the action and overwrite the submit button
-	sendButton.onclick = sendToOpenRadar;
-}
-
 function fillDuplicateContent() {
 	originalAction();
 
@@ -35,6 +22,11 @@ function getMessage(msgEvent) { //The GlobalPage.html returned
 			}
 			else overwriteSubmitButton();
 		}	
+		else if (msgEvent.message[0] == "wantsUpdateRadar") {
+			if (msgEvent.message[1] == "yes") {
+				lookForRadarToUpdate();
+			}
+		}
 		else if (msgEvent.message[1] != "null") {
 			 document.getElementsByName(msgEvent.message[0])[0].value = msgEvent.message[1];
 		}
@@ -52,11 +44,29 @@ function getMessage(msgEvent) { //The GlobalPage.html returned
 		}
 		else document.getElementById(msgEvent.message[0]).value = msgEvent.message[1];
 	}
+	else if (msgEvent.name == "update") {
+		var allElements = document.getElementsByTagName("a");
+		var aElement;
+		
+		for (aElement in allElements) {
+			var ref = allElements[aElement].getAttribute("href");
+			if (ref.indexOf("/radar?id=") === 0) {
+					var radarNumber = msgEvent.message[1];
+					if (allElements[aElement].innerHTML.indexOf(radarNumber) != -1 || radarNumber.indexOf(allElements[aElement].innerHTML) != -1) {					
+						window.open('http://www.openradar.me/myradars/edit?id=' + ref.substring(10, ref.length), "new tab");
+						break;
+					}
+			}
+		}
+	}
 }
 
 safari.self.addEventListener("message", getMessage, false);
 
 if (document.URL == "http://openradar.appspot.com/myradars/add" || document.URL == "http://www.openradar.me/myradars/add") fillContent(); //In OpenRadar bug reporter
+else if (document.URL == "http://openradar.appspot.com/myradars" || document.URL == "http://www.openradar.me/myradars") safari.self.tab.dispatchMessage("getOpenRadarValue", "wantsUpdateRadar"); //In OpenRadar bug reporter
+else if (document.URL.indexOf("http://openradar.appspot.com/myradars/edit?id=") != -1 || document.URL.indexOf("http://www.openradar.me/myradars/edit?id=") != -1) fillUpdatedContent();
 else if (document.URL.indexOf("http://openradar.appspot.com") != -1 || document.URL.indexOf("http://www.openradar.me") != -1) addDuplicateButton(); //In OpenRadar, in description page
 else if (document.title.indexOf("New Problem") != -1) safari.self.tab.dispatchMessage("getOpenRadarValue", "wantsDuplicateRadar"); //In Apple bug reporter, in "New Problem" page.
 else if (document.title.indexOf("Home") != -1) safari.self.tab.dispatchMessage("getOpenRadarValue", "wantsOpenRadar"); //In Apple bug reporter, in the submission confirmation.
+else if (document.title.indexOf("Apple Bug Reporter - ") != -1) addUpdateButton(); //In Apple bug reporter, looking at a existing bug report
