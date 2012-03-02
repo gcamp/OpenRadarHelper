@@ -2,6 +2,8 @@ h1. OpenRadarHelper
 
 OpenRadarHelper helps you send bug description from RadarWeb to OpenRadar and vice versa. 
 
+Download the git repository and look at the code, or download it directly "here":https://github.com/downloads/gcamp/OpenRadarHelper/OpenRadarHelper_v1.0.zip.
+
 h2. Features
 
 h3. Duplicate Radar
