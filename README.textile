@@ -1,0 +1,23 @@
+h1. OpenRadarHelper
+
+OpenRadarHelper helps you send bug description from RadarWeb to OpenRadar and vice versa. 
+
+h2. Features
+
+h3. Duplicate Radar
+
+When looking at a radar in OpenRadar, you will se a button "Duplicate this radar on bugreport.apple.com". Click on this button will open Apple's bug reporter in new tab. Log in and create a new issue. The content of the radar will be automatically entered for you. 
+
+h3. Send to OpenRadar
+
+When you just created a new original issue on Apple's bug reporter, a new tab will open with the OpenRadar "Add a Radar" form already filled. You may need to log before that step.
+
+h3. Update radar from Apple's bug reporter.
+
+If Apple updated one of your radar and you want to update the new content on OpenRadar, you just need to go to the radar description and click the "Update this radar on OpenRadar". You will be transferred to OpenRadar with the update radar form already filled .
+
+h2. Other info
+
+OpenRadarHelper was a side project by "Guillaume Campagna":http://gcamp.ca. This is my first Javascript project, I learn while doing it. It's probably not the best code I've written!
+
+Patches are welcome!
