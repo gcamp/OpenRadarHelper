@@ -10,14 +10,14 @@ When looking at a radar in OpenRadar, you will se a button "Duplicate this radar
 
 h3. Send to OpenRadar
 
-When you just created a new original issue on Apple's bug reporter, a new tab will open with the OpenRadar "Add a Radar" form already filled. You may need to log before that step.
+When you just created a new original issue on Apple's bug reporter, a new tab will open with the OpenRadar "Add a Radar" form already filled. You may need to login before that step.
 
 h3. Update radar from Apple's bug reporter.
 
-If Apple updated one of your radar and you want to update the new content on OpenRadar, you just need to go to the radar description and click the "Update this radar on OpenRadar". You will be transferred to OpenRadar with the update radar form already filled .
+If Apple updated one of your radar and you want to send that new content on OpenRadar, you just need to go to the radar description in Apple's bug reporter and click the "Update this radar on OpenRadar". You will be transferred to OpenRadar with the update radar form already filled .
 
 h2. Other info
 
-OpenRadarHelper was a side project by "Guillaume Campagna":http://gcamp.ca. This is my first Javascript project, I learn while doing it. It's probably not the best code I've written!
+OpenRadarHelper was a side project by "Guillaume Campagna":http://gcamp.ca. This is my first Javascript project, I learned it while doing it. It's probably not the best code I've written!
 
 Patches are welcome!
